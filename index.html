@@ -22,20 +22,43 @@
     <div class="container">
         <form class="col-md-6 m-auto py-5">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <input type="text" class="form-control" id="city" placeholder="Enter a location for Weather ...">
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-danger">Search</button>
+                    <button type="button" class="btn btn-danger" id="submit">Search</button>
                 </div>
             </div>
         </form>
         <div class="weather-status text-white text-center">
             <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
-            <h1>Dhaka</h1>
-            <h3><span>38.06</span>&deg;C</h3>
-            <h1 class="lead">Clouds</h1>
+            <h1 id="displayCity">Dhaka</h1>
+            <h3><span id="displayTemp">38.06</span>&deg;C</h3>
+            <h1 class="lead" id="displayWeather">Clouds</h1>
         </div>
     </div>
 
+
+    <!-- weather script -->
+    <script>
+        document.getElementById('submit').addEventListener('click', function(){
+            const city = document.getElementById('city').value;
+            console.log(city);
+            weather(city);
+        });
+        function weather(city){
+            fetch('http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=8399b2671a154a7848fce8cb91db5957')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('displayCity').innerText = data.name;
+                const kelvin =  data['main']['temp'];
+                const celsius = kelvin - 273.15;
+                document.getElementById('displayTemp').innerText = celsius.toFixed(2);
+                document.getElementById('displayWeather').innerText = data['weather'][0]['description'];
+
+            })
+        }
+        
+    </script>
 </body>
 
 </html>
